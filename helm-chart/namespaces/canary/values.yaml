@@ -1,0 +1,9 @@
+environment: canary
+
+namespace: prod
+
+backend:
+  replicaCount: 1
+
+frontend:
+  replicaCount: 1

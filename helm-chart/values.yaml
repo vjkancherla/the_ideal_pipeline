@@ -1,0 +1,33 @@
+# Default values for test-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+environment: dev
+
+namespace: dev
+
+image:
+  repository: vjkancherla/go_application
+  pullPolicy: IfNotPresent
+  tag: "v1"
+
+backend:
+  port: 8080
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 10m
+      memory: 50Mi
+  service:
+    port: 8080
+
+frontend:
+  port: 80
+  replicaCount: 1
+  resources:
+    limits:
+      cpu: 10m
+      memory: 50Mi
+  service:
+    type: LoadBalancer
+    port: 80

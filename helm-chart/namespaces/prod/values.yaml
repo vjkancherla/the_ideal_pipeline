@@ -1,0 +1,9 @@
+environment: prod
+
+namespace: prod
+
+backend:
+  replicaCount: 4
+
+frontend:
+  replicaCount: 4

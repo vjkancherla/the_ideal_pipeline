@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: go-app-canary
+  namespace: argo
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argo
+  project: default
+  source:
+    path: helm-chart
+    repoURL:  'https://github.com/vjkancherla/the_ideal_pipeline'
+    helm:
+      valueFiles:
+        - namespaces/canary/values.yaml
+        - namespaces/canary/version.yaml
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

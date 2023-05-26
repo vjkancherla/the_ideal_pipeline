@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gceme-frontend-{{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  ports:
+  - name: http
+    port: {{ .Values.frontend.service.port }}
+    targetPort: {{ .Values.frontend.port }}
+    protocol: TCP
+  selector:
+    app: gceme
+    role: frontend

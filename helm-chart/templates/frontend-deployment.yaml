@@ -1,0 +1,37 @@
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: gceme-frontend-{{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+      matchLabels:
+          app: gceme
+          role: frontend
+          env:  {{ .Values.environment }}
+  template:
+    metadata:
+      name: frontend
+      labels:
+        app: gceme
+        role: frontend
+        env:  {{ .Values.environment }}
+    spec:
+      containers:
+      - name: frontend
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        resources:
+          limits:
+            memory: {{ .Values.frontend.resources.limits.memory }}
+            cpu: {{ .Values.frontend.resources.limits.cpu }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: frontend
+          containerPort: {{ .Values.frontend.port }}
+        command: ["sh", "-c", "/go/bin/app -frontend=true -backend-service=http://gceme-backend-{{ .Values.environment }}:{{ .Values.backend.service.port }} -port={{ .Values.frontend.port }}"]
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.frontend.port }}
