@@ -29,5 +29,5 @@ frontend:
       cpu: 10m
       memory: 50Mi
   service:
-    type: LoadBalancer
+    type: ClusterIP
     port: 80

@@ -7,3 +7,5 @@ backend:
 
 frontend:
   replicaCount: 1
+  # service:
+  #   type: LoadBalancer

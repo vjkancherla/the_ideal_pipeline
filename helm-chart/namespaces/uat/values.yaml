@@ -1,3 +1,7 @@
 environment: uat
 
 namespace: uat
+
+# frontend:
+#   service:
+#     type: LoadBalancer
