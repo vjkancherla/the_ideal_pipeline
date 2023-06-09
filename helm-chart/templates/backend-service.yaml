@@ -1,5 +1,3 @@
-{ if ne .Values.environment "canary" }}
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -14,5 +12,3 @@ spec:
   selector:
     role: backend
     app: gceme
-
-{{ end }}
