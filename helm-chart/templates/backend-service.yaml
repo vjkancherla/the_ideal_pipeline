@@ -12,3 +12,6 @@ spec:
   selector:
     role: backend
     app: gceme
+    {{ if eq .Values.environment "canary" }}
+    env: canary
+    {{ end }}

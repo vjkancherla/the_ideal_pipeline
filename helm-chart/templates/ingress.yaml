@@ -1,0 +1,25 @@
+{{ if ne .Values.environment "canary" }}
+#Creating an Ingress because the K8s Service by itself was only forwarding
+#requests to a single pod. We need to install nginx-ingress using Helm.
+#=> k port-forward svc/my-nginx-ingress-ingress-nginx-controller 9000:80.
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gceme-ingress-{{ .Values.environment }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: go-app-{{ .Values.environment }}-127-0-0-1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  gceme-frontend-{{ .Values.environment }}
+                port:
+                  number: 80
+
+{{ end }}
