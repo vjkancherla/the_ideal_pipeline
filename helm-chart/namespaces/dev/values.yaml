@@ -1,3 +1,6 @@
 environment: dev
 
 namespace: dev
+
+ingress:
+  enabled: false

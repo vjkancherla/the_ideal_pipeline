@@ -11,6 +11,9 @@ image:
   pullPolicy: IfNotPresent
   tag: "v1"
 
+ingress:
+  enabled: true
+
 backend:
   port: 8080
   replicaCount: 1

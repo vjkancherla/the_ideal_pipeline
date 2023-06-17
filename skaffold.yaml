@@ -1,0 +1,60 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: the-ideal-pipeline
+build:
+  artifacts:
+    - image: vjkancherla/go_application
+      context: go_application
+      kaniko:
+        dockerfile: Dockerfile
+  cluster:
+    dockerConfig:
+      path: go_application/config.json
+
+deploy:
+  helm:
+    releases:
+      - name: go-app-chart
+        chartPath: helm-chart
+        valuesFiles:
+          - helm-chart/values.yaml
+        version: 0.1.0
+
+profiles:
+  - name: dev
+    deploy:
+      helm:
+        releases:
+          - name: go-app-dev
+            chartPath: helm-chart
+            valuesFiles:
+              - helm-chart/namespaces/dev/values.yaml
+              - helm-chart/namespaces/dev/version.yaml
+  - name: uat
+    deploy:
+      helm:
+        releases:
+          - name: go-app-uat
+            chartPath: helm-chart
+            valuesFiles:
+              - helm-chart/namespaces/uat/values.yaml
+              - helm-chart/namespaces/uat/version.yaml
+  - name: prod
+    deploy:
+      helm:
+        releases:
+          - name: go-app-prod
+            chartPath: helm-chart
+            valuesFiles:
+              - helm-chart/namespaces/prod/values.yaml
+              - helm-chart/namespaces/prod/version.yaml
+  - name: canary
+    deploy:
+      helm:
+        releases:
+          - name: go-app-canary
+            chartPath: helm-chart
+            valuesFiles:
+              - helm-chart/namespaces/canary/values.yaml
+              - helm-chart/namespaces/canary/version.yaml

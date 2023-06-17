@@ -1,4 +1,4 @@
-{{ if ne .Values.environment "canary" }}
+{{- if and (eq .Values.ingress.enabled true) (ne .Values.environment "canary") }}
 #Creating an Ingress because the K8s Service by itself was only forwarding
 #requests to a single pod. We need to install nginx-ingress using Helm.
 #=> k port-forward svc/my-nginx-ingress-ingress-nginx-controller 9000:80.
