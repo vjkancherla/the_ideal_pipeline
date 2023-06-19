@@ -113,7 +113,7 @@
 pipeline {
   agent {
     kubernetes {
-      yamlFile "jenkins-pod.yaml"
+      yamlFile "jenkins-agent-pod.yaml"
     }
   }
   environment {
