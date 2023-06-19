@@ -113,6 +113,7 @@
 pipeline {
   agent {
     kubernetes {
+      label 'the_ideal_pipeline'
       yamlFile "jenkins-agent-pod.yaml"
     }
   }
