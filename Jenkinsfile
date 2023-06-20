@@ -12,7 +12,7 @@ pipeline {
     stage("Build") {
       steps {
         container("kaniko") {
-          sh "/kaniko/executor --dockerfile `pwd`/go_application/Dockerfile  --context `pwd` --destination vjkancherla/go_application_jenkins:v1"
+          sh "/kaniko/executor --context `pwd`/go_application --dockerfile Dockerfile --destination vjkancherla/go_application_jenkins:v1"
         }
       }
     }
