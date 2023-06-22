@@ -43,6 +43,6 @@ def package_and_push_image() {
 
 def deploy_to_dev() {
   container("helm") {
-    sh "helm upgrade --install --values-file helm-chart/namespaces/dev/values.yaml --set image.repository="${IMAGE_REPO}" --set image.tag="${IMAGE_TAG}" helm-go-dev helm-chart/ "
+    sh "helm upgrade --install --values helm-chart/namespaces/dev/values.yaml --set image.repository="${IMAGE_REPO}" --set image.tag="${IMAGE_TAG}" helm-go-dev helm-chart/ "
   }
 }
