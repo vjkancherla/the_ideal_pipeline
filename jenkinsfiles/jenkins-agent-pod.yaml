@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+spec:
+  serviceAccount: my-jenkins
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: kaniko-secret
+      mountPath: /kaniko/.docker/
+  - name: helm
+    image: alpine/helm:3.12.1
+    command:
+    - cat
+    tty: true
+  - name: kubectl
+    image: d3fk/kubectl:v1.24
+    command:
+    - cat
+    tty: true
+  volumes:
+  - name: kaniko-secret
+    secret:
+      secretName: regcred
+      items:
+      - key: .dockerconfigjson
+        path: config.json

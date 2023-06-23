@@ -3,7 +3,7 @@
 pipeline {
   agent {
     kubernetes {
-      yamlFile "jenkins-agent-pod.yaml"
+      yamlFile "../jenkins-agent-pod.yaml"
     }
   }
 
@@ -26,24 +26,6 @@ pipeline {
       }
     }
 
-    stage("Deploy-To-Dev") {
-      when {
-        // skip this stage unless branch is NOT master
-        not {
-          branch "master"
-        }
-      }
-      steps {
-        deploy_to_dev()
-      }
-    }
-
-    stage("Verify-Deployment-To-Dev") {
-      steps {
-        verify_deployment("dev")
-      }
-    }
-
     stage("Deploy-To-UAT") {
       when {
         // skip this stage unless on Master branch
@@ -51,11 +33,15 @@ pipeline {
       }
       steps {
         approve_deploy("uat")
-        deploy_to_uat()
+        deploy("uat")
       }
     }
 
     stage("Verify-Deployment-To-UAT") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
       steps {
         verify_deployment("uat")
       }
@@ -68,13 +54,17 @@ pipeline {
       }
       steps {
         approve_deploy("canary")
-        deploy_to_canary()
+        deploy("canary")
       }
     }
 
     stage("Verify-Deployment-To-Canary") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
       steps {
-        verify_deployment("canary")
+        verify_deployment("prod")
       }
     }
 
@@ -85,11 +75,15 @@ pipeline {
       }
       steps {
         approve_deploy("prod")
-        deploy_to_prod()
+        deploy("prod")
       }
     }
 
     stage("Verify-Deployment-To-Prod") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
       steps {
         verify_deployment("prod")
       }
@@ -104,27 +98,9 @@ def package_and_push_image() {
   }
 }
 
-def deploy_to_dev() {
+def deploy(env) {
   container("helm") {
-    sh "helm upgrade --install --values helm-chart/namespaces/dev/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-dev helm-chart/"
-  }
-}
-
-def deploy_to_uat() {
-  container("helm") {
-    sh "helm upgrade --install --values helm-chart/namespaces/uat/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-uat helm-chart/"
-  }
-}
-
-def deploy_to_canary() {
-  container("helm") {
-    sh "helm upgrade --install --values helm-chart/namespaces/canary/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-canary helm-chart/"
-  }
-}
-
-def deploy_to_prod() {
-  container("helm") {
-    sh "helm upgrade --install --values helm-chart/namespaces/prod/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-prod helm-chart/"
+    sh "helm upgrade --install --values helm-chart/namespaces/${env}/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-${env} helm-chart/"
   }
 }
 
@@ -136,5 +112,7 @@ def approve_deploy(env) {
 
 def verify_deployment(env) {
   sleep(30)
-  sh "kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl gceme-frontend-${env}.${env}.svc.cluster.local:80"
+  container("kubectl") {
+    sh "kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl gceme-frontend-${env}.${env}.svc.cluster.local:80"
+  }
 }
