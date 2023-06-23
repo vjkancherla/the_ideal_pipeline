@@ -26,9 +26,72 @@ pipeline {
       }
     }
 
-    stage("Deploy") {
+    stage("Deploy-To-Dev") {
+      when {
+        // skip this stage unless branch is NOT master
+        not {
+          branch "master"
+        }
+      }
       steps {
         deploy_to_dev()
+      }
+    }
+
+    stage("Verify-Deployment-To-Dev") {
+      steps {
+        verify_deployment("dev")
+      }
+    }
+
+    stage("Deploy-To-UAT") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
+      steps {
+        approve_deploy("uat")
+        deploy_to_uat()
+      }
+    }
+
+    stage("Verify-Deployment-To-UAT") {
+      steps {
+        verify_deployment("uat")
+      }
+    }
+
+    stage("Deploy-To-Canary") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
+      steps {
+        approve_deploy("canary")
+        deploy_to_canary()
+      }
+    }
+
+    stage("Verify-Deployment-To-Canary") {
+      steps {
+        verify_deployment("canary")
+      }
+    }
+
+    stage("Deploy-To-Prod") {
+      when {
+        // skip this stage unless on Master branch
+        branch "master"
+      }
+      steps {
+        approve_deploy("prod")
+        deploy_to_prod()
+      }
+    }
+
+    stage("Verify-Deployment-To-Prod") {
+      steps {
+        verify_deployment("prod")
       }
     }
 
@@ -45,4 +108,33 @@ def deploy_to_dev() {
   container("helm") {
     sh "helm upgrade --install --values helm-chart/namespaces/dev/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-dev helm-chart/"
   }
+}
+
+def deploy_to_uat() {
+  container("helm") {
+    sh "helm upgrade --install --values helm-chart/namespaces/uat/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-uat helm-chart/"
+  }
+}
+
+def deploy_to_canary() {
+  container("helm") {
+    sh "helm upgrade --install --values helm-chart/namespaces/canary/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-canary helm-chart/"
+  }
+}
+
+def deploy_to_prod() {
+  container("helm") {
+    sh "helm upgrade --install --values helm-chart/namespaces/prod/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-prod helm-chart/"
+  }
+}
+
+def approve_deploy(env) {
+  timeout(time:1, unit:'HOURS') {
+		input("Approve deploy to ${env}")
+	}
+}
+
+def verify_deployment(env) {
+  sleep(30)
+  sh "kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl gceme-frontend-${env}.${env}.svc.cluster.local:80"
 }
