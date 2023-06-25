@@ -99,7 +99,7 @@ def package_and_push_image() {
 }
 
 def deploy(env) {
-  container("helm") {
+  container("k8s") {
     sh "helm upgrade --install --values helm-chart/namespaces/${env}/values.yaml --set image.repository=${IMAGE_REPO} --set image.tag=${IMAGE_TAG} helm-go-${env} helm-chart/"
   }
 }
@@ -112,7 +112,7 @@ def approve_deploy(env) {
 
 def verify_deployment(env) {
   sleep(30)
-  container("kubectl") {
+  container("k8s") {
     sh "kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl gceme-frontend-${env}.${env}.svc.cluster.local:80"
   }
 }

@@ -11,13 +11,8 @@ spec:
     volumeMounts:
     - name: kaniko-secret
       mountPath: /kaniko/.docker/
-  - name: helm
-    image: alpine/helm:3.12.1
-    command:
-    - cat
-    tty: true
-  - name: kubectl
-    image: bitnami/kubectl:1.24.15
+  - name: k8s
+    image: alpine/k8s:1.24.15
     command:
     - cat
     tty: true
