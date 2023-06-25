@@ -53,8 +53,10 @@ pipeline {
         branch "main"
       }
       steps {
-        approve_deploy("canary")
-        deploy("canary")
+        if (check_prod_deploy_exists()) {
+          approve_deploy("canary")
+          deploy("canary")
+        }
       }
     }
 
@@ -64,7 +66,10 @@ pipeline {
         branch "main"
       }
       steps {
-        verify_deployment("prod")
+        if (check_prod_deploy_exists()) {
+          // Canary deployment is exposed by the Prod-SVC
+          verify_deployment("prod")
+        }
       }
     }
 
@@ -114,5 +119,15 @@ def verify_deployment(env) {
   sleep(30)
   container("k8s") {
     sh "kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl gceme-frontend-${env}.${env}.svc.cluster.local:80"
+  }
+}
+
+def check_prod_deploy_exists() {
+  container("k8s") {
+    if (!sh(script:"kubectl get ns prod", returnStdout: true).trim()) {
+        println("THERE IS NO PROD DEPLOYMENT YET. SKIP CANARY")
+        return false
+      }
+    return true
   }
 }
