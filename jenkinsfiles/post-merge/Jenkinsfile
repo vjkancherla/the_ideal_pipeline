@@ -125,7 +125,7 @@ def verify_deployment(env) {
 
 def check_prod_deploy_exists() {
   container("k8s") {
-    if (!sh(script:"kubectl get ns prod", returnStdout: true).trim()) {
+    if (!sh(script:"kubectl get ns prod", returnStatus: true) == 0) {
         println("THERE IS NO PROD DEPLOYMENT YET. SKIP CANARY")
         return false
       }
