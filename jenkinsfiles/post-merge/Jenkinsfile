@@ -20,32 +20,32 @@ pipeline {
   }
 
   stages  {
-    stage("Build") {
-      steps {
-        package_and_push_image()
-      }
-    }
-
-    stage("Deploy-To-UAT") {
-      when {
-        // skip this stage unless on main branch
-        branch "main"
-      }
-      steps {
-        approve_deploy("uat")
-        deploy("uat")
-      }
-    }
-
-    stage("Verify-Deployment-To-UAT") {
-      when {
-        // skip this stage unless on main branch
-        branch "main"
-      }
-      steps {
-        verify_deployment("uat")
-      }
-    }
+    // stage("Build") {
+    //   steps {
+    //     package_and_push_image()
+    //   }
+    // }
+    //
+    // stage("Deploy-To-UAT") {
+    //   when {
+    //     // skip this stage unless on main branch
+    //     branch "main"
+    //   }
+    //   steps {
+    //     approve_deploy("uat")
+    //     deploy("uat")
+    //   }
+    // }
+    //
+    // stage("Verify-Deployment-To-UAT") {
+    //   when {
+    //     // skip this stage unless on main branch
+    //     branch "main"
+    //   }
+    //   steps {
+    //     verify_deployment("uat")
+    //   }
+    // }
 
     stage("Deploy-To-Canary") {
       when {
@@ -125,10 +125,12 @@ def verify_deployment(env) {
 
 def check_prod_deploy_exists() {
   container("k8s") {
-    if (!sh(script:"kubectl get ns prod", returnStatus: true) == 0) {
-        println("THERE IS NO PROD DEPLOYMENT YET. SKIP CANARY")
-        return false
-      }
-    return true
+    prod_ns_exists = sh(script:"kubectl get ns prod", returnStatus: true)
+    println("prod_ns_exists: ${prod_ns_exists}")
+    if (prod_ns_exists == 0) {
+      return true
+    }
+    println("THERE IS NO PROD DEPLOYMENT YET. SKIP CANARY")
+    return false
   }
 }
