@@ -51,12 +51,13 @@ pipeline {
       when {
         // skip this stage unless on main branch
         branch "main"
+        expression {
+          check_prod_deploy_exists()
+        }
       }
       steps {
-        if (check_prod_deploy_exists()) {
-          approve_deploy("canary")
-          deploy("canary")
-        }
+        approve_deploy("canary")
+        deploy("canary")
       }
     }
 
@@ -64,12 +65,12 @@ pipeline {
       when {
         // skip this stage unless on main branch
         branch "main"
+        expression {
+          check_prod_deploy_exists()
+        }
       }
       steps {
-        if (check_prod_deploy_exists()) {
-          // Canary deployment is exposed by the Prod-SVC
-          verify_deployment("prod")
-        }
+        verify_deployment("prod")
       }
     }
 
