@@ -28,8 +28,8 @@ pipeline {
 
     stage("Deploy-To-UAT") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         approve_deploy("uat")
@@ -39,8 +39,8 @@ pipeline {
 
     stage("Verify-Deployment-To-UAT") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         verify_deployment("uat")
@@ -49,8 +49,8 @@ pipeline {
 
     stage("Deploy-To-Canary") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         approve_deploy("canary")
@@ -60,8 +60,8 @@ pipeline {
 
     stage("Verify-Deployment-To-Canary") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         verify_deployment("prod")
@@ -70,8 +70,8 @@ pipeline {
 
     stage("Deploy-To-Prod") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         approve_deploy("prod")
@@ -81,8 +81,8 @@ pipeline {
 
     stage("Verify-Deployment-To-Prod") {
       when {
-        // skip this stage unless on Master branch
-        branch "master"
+        // skip this stage unless on main branch
+        branch "main"
       }
       steps {
         verify_deployment("prod")
