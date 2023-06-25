@@ -3,4 +3,4 @@ environment: dev
 namespace: dev
 
 ingress:
-  enabled: false
+  enabled: true

@@ -11,6 +11,12 @@ spec:
     volumeMounts:
     - name: kaniko-secret
       mountPath: /kaniko/.docker/
+  - name: helm
+    image: alpine/helm:3.12.1
+    command:
+    - cat
+    tty: true
+  
   volumes:
   - name: kaniko-secret
     secret:
