@@ -20,32 +20,32 @@ pipeline {
   }
 
   stages  {
-    // stage("Build") {
-    //   steps {
-    //     package_and_push_image()
-    //   }
-    // }
-    //
-    // stage("Deploy-To-UAT") {
-    //   when {
-    //     // skip this stage unless on main branch
-    //     branch "main"
-    //   }
-    //   steps {
-    //     approve_deploy("uat")
-    //     deploy("uat")
-    //   }
-    // }
-    //
-    // stage("Verify-Deployment-To-UAT") {
-    //   when {
-    //     // skip this stage unless on main branch
-    //     branch "main"
-    //   }
-    //   steps {
-    //     verify_deployment("uat")
-    //   }
-    // }
+    stage("Build") {
+      steps {
+        package_and_push_image()
+      }
+    }
+
+    stage("Deploy-To-UAT") {
+      when {
+        // skip this stage unless on main branch
+        branch "main"
+      }
+      steps {
+        approve_deploy("uat")
+        deploy("uat")
+      }
+    }
+
+    stage("Verify-Deployment-To-UAT") {
+      when {
+        // skip this stage unless on main branch
+        branch "main"
+      }
+      steps {
+        verify_deployment("uat")
+      }
+    }
 
     stage("Deploy-To-Canary") {
       when {
