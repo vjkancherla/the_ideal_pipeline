@@ -1,0 +1,35 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: setup-jenkins
+
+manifests:
+  rawYaml:
+    - k8s-objects/*
+
+deploy:
+  helm:
+    releases:
+      - name: my-jenkins
+        chartPath: jenkins-12.2.1
+        namespace: jenkins
+        createNamespace: true
+        valuesFiles:
+          - ./values.yaml
+      - name: my-metallb
+        remoteChart: https://github.com/metallb/metallb/releases/download/metallb-chart-0.13.10/metallb-0.13.10.tgz
+        namespace: ml
+        createNamespace: true
+      - name: nginx-ingress
+        remoteChart: https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.0/ingress-nginx-4.7.0.tgz
+        namespace: nig
+        createNamespace: true
+  # deploys the K8s manifest defined under "manifests" directive above
+  kubectl: {}
+
+portForward:
+  - resourceType: service
+    resourceName: my-jenkins
+    namespace: jenkins
+    port: 80
+    localPort: 9000

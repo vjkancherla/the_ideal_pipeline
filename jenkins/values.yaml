@@ -1,0 +1,29 @@
+global:
+  storageClass: local-path
+
+persistence:
+  size: 100Mi
+
+service:
+  type: ClusterIP
+
+configAsCode:
+  enabled: true
+
+plugins:
+  - kubernetes:3937.vd7b_82db_e347b_
+  - workflow-aggregator:596.v8c21c963d92d
+  - git:5.1.0
+  - blueocean:1.27.4
+
+# rbac:
+#   rules:
+#     - apiGroups:
+#       - "*"
+#       resources:
+#         - "*"
+#       verbs:
+#         - "*"
+
+agent:
+  enabled: true
