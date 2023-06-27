@@ -1,0 +1,9 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: metallb-ip-pool
+  namespace: ml
+spec:
+  #the addresses must be in the same address space as node ips
+  addresses:
+  - 172.21.0.240-172.21.0.250
