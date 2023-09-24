@@ -1,7 +1,25 @@
 {
-    "auths": {
-        "https://index.docker.io/v1/": {
-            "auth": "dmprYW5jaGVybGE6RDBjazNyaHVicDRzc3cwcmQ="
-        }
-    }
+	"auths": {
+		"https://index.docker.io/v1/": {
+			"auth": "ENC[AES256_GCM,data:1Z2sAfLjhCUZbuhN/XKfKXy3w9wznWJmoRG4nvt7Gv/4IVhq4aIgXQ==,iv:SmfcByx66NLKW8Ysiwzo3+XtVc+3Bea+0IHxRe9JXKk=,tag:rC5QyBDgoCgMReCwuUQmyg==,type:str]"
+		}
+	},
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2023-09-24T17:00:55Z",
+		"mac": "ENC[AES256_GCM,data:DPuw9qPcgzUJYBKsa/nwIENWaVvfOKBwHXdjuReeYm0Txo5YiAqXlmQc1DlCWc8BvCrOENzpa8Nil9W8wg3kDYFVxEOE4vk3TVjqAervMyAIiOG8H0alGGgvvu272jGthlcKzWEu+qEt+OtsqRtNLD5k+klODKlM6/3Bx6XfO4E=,iv:+fxKw1ca6v7a41IDFGJXwxmMnpxU/g+1x792sXbadjI=,tag:dzQ5HRxJkeznPjJ0iXQ96A==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2023-09-24T17:00:55Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nhF4D09jLTsR/q+cSAQdAREKA4TyWbnJUOc4euE5EMZJ+jPs5NGneaqZYPmq0likw\nlV8RwsGc/5Ni+Mmm2Wub9XRsTwsAIc/24qLKDY6AswYbkYU2LKH9tBvR+QFlszgL\n1GYBCQIQumjkBiw/0C7ZI5X1tY1fDO/MauhvaXxA4/vrZpdaxx7b8imeYyOa5VFN\ncW+NppArGS9VDpCecq89YrQbaGMMLgw9FY8yAETUbu3Et8zSbxObn4NySPb5Ox0V\n7Pd++Rp9aW4=\n=GKU1\n-----END PGP MESSAGE-----",
+				"fp": "D730113B80D6746CB375D862851DB598D869B478"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.8.0"
+	}
 }
