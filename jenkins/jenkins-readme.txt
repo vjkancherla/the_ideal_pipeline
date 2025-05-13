@@ -33,7 +33,7 @@ d. k port-forward svc/my-jenkins 9000:80 -n jenkins
     docker-registry regcred \
     --docker-server "https://index.docker.io/v1/" \
     --docker-username "vjkancherla" \
-    --docker-password "D0ck3rhubp4ssw0rd" \
+    --docker-password "xxxxxxxx" \
     --docker-email "vj_kancherla@yahoo.com"
 <---->
 
